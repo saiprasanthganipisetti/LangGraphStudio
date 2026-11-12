@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curriculum Expedition Tracker • LangGraph Adventure</title><link rel="stylesheet" href="styles.css">
+<style>
+.audit-wrap{max-width:1120px;margin:auto;padding:22px}.audit-hero,.audit-card{background:#fff;border:2px solid #d8e9c9;border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 5px 18px #355b2510}
+.audit-hero{background:linear-gradient(120deg,#e8f6ff,#fff4d7)}.audit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.audit-pill{display:inline-block;background:#e4f2d8;padding:6px 12px;border-radius:20px;font-weight:700;color:#315d2c}
+.audit-module{background:#f8fbf4;border:1px solid #dce9d5;border-radius:14px;padding:14px;margin:12px 0}
+.audit-lesson{display:grid;grid-template-columns:24px 1fr auto;gap:9px;align-items:start;padding:9px 4px;border-bottom:1px solid #e5eee0}
+.audit-lesson:last-child{border-bottom:0}.audit-lesson a{font-weight:700;color:#315d2c}.audit-status{font-size:12px;background:#e6f1ff;border-radius:14px;padding:4px 8px;white-space:nowrap}
+.audit-note{background:#fff5d9;border-left:5px solid #e5b94d;padding:12px;border-radius:8px}
+.audit-bar{height:12px;background:#e8efe3;border-radius:12px;overflow:hidden}.audit-bar>span{display:block;height:100%;width:0;background:#62a84e}
+.audit-btn{background:#438c3b;color:white;border:0;border-radius:22px;padding:10px 16px;margin:5px;cursor:pointer;font-weight:700}.audit-btn.alt{background:#e8f2df;color:#315d2c}
+@media(max-width:600px){.audit-lesson{grid-template-columns:24px 1fr}.audit-status{grid-column:2}}
+</style></head><body>
+<header class="topbar"><a class="brand" href="index.html">🧭 LangGraph Adventure</a><span class="tag">CURRICULUM QUALITY GATE</span></header>
+<main class="audit-wrap"><a href="index.html">← Adventure Map</a>
+<section class="audit-hero"><span class="audit-pill">🧭 OFFICIAL COURSE AUDIT</span><h1>Every lesson accounted for</h1>
+<p>This tracker maps the official <b>Introduction to LangGraph – Python</b> course curriculum to Adventure Studio modules and TeamPilot use cases. Tick a lesson only after the team has completed its explanation and exercise.</p>
+<div class="audit-note"><b>Important:</b> The Academy page lists 55 course lessons, including setup, resources, feedback and course material. This tracker maps the named technical lessons and includes the course setup/deployment context; it does not pretend that 55 individual technical concepts exist.</div>
+<h3 id="count">0 topics marked complete</h3><div class="audit-bar"><span id="bar"></span></div><p id="pct">0%</p>
+<button class="audit-btn" onclick="resetAudit()">Reset tracker</button><button class="audit-btn alt" onclick="markAll()">Mark all reviewed</button></section>
+<div id="modules"></div>
+<section class="audit-card"><h2>🧪 Additional concept demos requested for the workshop</h2>
+<p>These are useful concepts and implementation patterns to teach explicitly, even where they are not separate named lessons on the Academy course page.</p>
+<div id="extras" class="audit-grid"></div></section>
+<section class="audit-card"><h2>📌 Version baseline for the next implementation sprint</h2>
+<ul><li>Python: 3.12.x (within Academy's documented 3.11–3.13 setup range).</li><li>LangGraph: 1.2.20 (latest stable release visible on PyPI on 12 Nov 2026; pin exact version).</li><li>FastAPI: 0.162.4.</li><li>Pydantic: 2.14.3.</li></ul>
+<p class="audit-note">This is a reproducible starting baseline, not a claim that every old snippet has already been executed against it. Re-run the smoke tests and resolve any API changes before the workshop. Add a provider integration only after the team chooses its model provider.</p>
+</section>
+<div style="margin:20px 0"><a class="audit-btn alt" href="team-pilot-hq.html">← TeamPilot HQ</a><a class="audit-btn" href="index.html">Adventure Map</a></div>
+</main><script src="curriculum-audit.js"></script></body></html>

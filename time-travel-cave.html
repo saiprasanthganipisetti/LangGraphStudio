@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Time Travel Cave • LangGraph Adventure</title><link rel="stylesheet" href="styles.css">
+<style>
+.cave-wrap{max-width:1080px;margin:auto;padding:22px}.cave-hero,.cave-card{background:#fff;border:2px solid #d8e9c9;border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 5px 18px #355b2510}
+.cave-hero{background:linear-gradient(120deg,#e9f8d8,#fff5d8)}.cave-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cave-pill{display:inline-block;background:#e4f2d8;padding:6px 12px;border-radius:20px;font-weight:700;color:#315d2c}
+.cave-choice{display:block;width:100%;text-align:left;background:#fff;border:2px solid #dce8d3;border-radius:14px;padding:13px;margin:8px 0;cursor:pointer;color:#23432a}
+.cave-choice.active{border-color:#60a34e;background:#f1fae9}.cave-choice small{display:block;margin-top:5px;color:#5e715b}
+.cave-code{white-space:pre-wrap;overflow:auto;background:#183b32;color:#f1ffe9;padding:16px;border-radius:14px;font-size:13px}
+.cave-note{background:#fff5d9;border-left:5px solid #e5b94d;padding:12px;border-radius:8px}
+.cave-btn{background:#438c3b;color:white;border:0;border-radius:22px;padding:10px 16px;margin:5px;cursor:pointer;font-weight:700}
+.cave-btn.alt{background:#e8f2df;color:#315d2c}.cave-step{padding:12px;border-radius:12px;background:#f2f8ed;margin:8px 0}
+.cave-wrap table{border-collapse:collapse;width:100%;min-width:540px}.cave-wrap th,.cave-wrap td{padding:10px;border-bottom:1px solid #dce8d3;text-align:left}
+</style></head><body>
+<header class="topbar"><a class="brand" href="index.html">🧭 LangGraph Adventure</a><span class="tag">DESTINATION 07 • TIME TRAVEL CAVE</span></header>
+<main class="cave-wrap">
+<a href="index.html">← Adventure Map</a>
+<section class="cave-hero"><span class="cave-pill">🕰️ TIME TRAVEL CAVE</span><h1>Pause. Inspect. Change. Replay.</h1>
+<p>Learn how LangGraph checkpoints let a workflow pause for people, recover from interruptions, inspect earlier states and explore alternative decisions.</p>
+<div class="cave-note"><b>Byte says:</b> “Imagine your graph leaves a trail of snapshots. You can pause at a checkpoint, ask your manager a question, fix a decision, or revisit an earlier point. The original history stays available while a new path branches off!”</div>
+<button class="cave-btn" onclick="sayByte()">🔊 Hear Byte</button><button class="cave-btn alt" onclick="speechSynthesis.cancel()">Stop voice</button></section>
+
+<section class="cave-card"><h2>🧭 The checkpoint trail</h2><p>A checkpointer saves graph state at super-step boundaries. A <b>thread_id</b> identifies the conversation/workflow thread. Checkpoints make human-in-the-loop, recovery and time travel possible.</p>
+<div class="cave-grid"><div class="cave-step">📥 <b>Input</b><br>Project brief received</div><div class="cave-step">🔎 <b>Analysis</b><br>Requirements extracted</div><div class="cave-step">🧩 <b>Allocation</b><br>Tasks assigned</div><div class="cave-step">⏸️ <b>Approval pause</b><br>Manager reviews proposal</div><div class="cave-step">✅ <b>Resume</b><br>Approved changes continue</div></div>
+<div class="cave-note">A checkpoint is a saved snapshot at a graph execution boundary—not a full copy of every Python variable or external system. External side effects need their own idempotency and recovery design.</div></section>
+
+<section class="cave-grid">
+<div class="cave-card"><h2>⏸️ Static breakpoints</h2><p>Configured when compiling/running the graph. Useful for debugging by pausing before or after named nodes.</p><p><b>TeamPilot example:</b> pause before <code>allocate_tasks</code> to inspect the incoming state, or after it to inspect the proposed assignments.</p></div>
+<div class="cave-card"><h2>🧑 Human interrupts</h2><p>Call <code>interrupt()</code> inside a node to pause conditionally and request external input. Resume with <code>Command(resume=...)</code> using the same thread ID.</p><p><b>TeamPilot example:</b> ask the manager to approve, reject or revise task owners before generating assignment emails.</p></div>
+</section>
+
+<section class="cave-card"><h2>🔁 What happens when an interrupt resumes?</h2>
+<ol><li>Graph reaches <code>interrupt(payload)</code>.</li><li>LangGraph persists the checkpoint and surfaces the payload to the caller.</li><li>The application displays the approval form to the manager.</li><li>Application invokes the graph again with <code>Command(resume=decision)</code> and the same <code>thread_id</code>.</li><li>The interrupt call returns the decision to the node and the graph continues.</li></ol>
+<div class="cave-note"><b>Important:</b> the node containing <code>interrupt()</code> restarts from its beginning when resumed. Put the interrupt before non-idempotent side effects; do not wrap it in a broad try/except that swallows the pause exception.</div></section>
+
+<section class="cave-card"><h2>🧪 Try a TeamPilot decision scenario</h2><p>Choose the event that should pause the graph.</p>
+<div id="scenarioChoices">
+<button class="cave-choice active" data-s="approval"><b>Manager approval</b><small>Proposed task owners and six assignment emails are ready.</small></button>
+<button class="cave-choice" data-s="missing"><b>Missing requirement</b><small>The project brief has an ambiguous acceptance criterion.</small></button>
+<button class="cave-choice" data-s="debug"><b>Developer debugging</b><small>The team wants to inspect the state after story generation.</small></button>
+</div><div id="scenarioAnswer" class="cave-note"></div></section>
+
+<section class="cave-card"><h2>💻 Select a code recipe</h2><div id="recipes">
+<button class="cave-choice active" data-r="interrupt">Dynamic interrupt</button>
+<button class="cave-choice" data-r="breakpoint">Static breakpoint</button>
+<button class="cave-choice" data-r="history">Inspect and time travel</button>
+<button class="cave-choice" data-r="edit">Edit a checkpoint</button>
+<button class="cave-choice" data-r="double">Double-texting strategy</button>
+</div><h3 id="codeTitle">human_approval.py</h3><pre class="cave-code" id="codeBlock"></pre>
+<button class="cave-btn" onclick="copyCode()">Copy code</button><button class="cave-btn alt" onclick="downloadCode()">Download Python file</button>
+<div id="codeNote" class="cave-note"></div></section>
+
+<section class="cave-card"><h2>🌀 Time travel: replay or branch?</h2><div class="cave-grid">
+<div class="cave-step"><b>Replay from a past checkpoint</b><p>Re-run from that saved state. The new execution creates a new branch of history; it does not erase the original.</p></div>
+<div class="cave-step"><b>Fork with edited state</b><p>Use <code>update_state</code> on a selected checkpoint, then resume from the resulting checkpoint to test an alternative.</p></div></div>
+<p class="cave-note">For TeamPilot: revisit the allocation checkpoint, change one person's capacity or task owner, then replay validation to compare the new outcome. Never treat a replay as undoing an email or other external action already performed.</p></section>
+
+<section class="cave-card"><h2>📨 Double-texting: what if a second user message arrives?</h2><p>“Double-texting” describes a new user message arriving while a run/thread is still active. It is an application-level concurrency decision, not one universal automatic behaviour.</p>
+<table><tr><th>Strategy</th><th>What it means</th><th>TeamPilot use</th></tr>
+<tr><td>Reject</td><td>Tell the user the run is busy; ask them to retry.</td><td>Simple first MVP.</td></tr>
+<tr><td>Enqueue</td><td>Queue the new message until the active run completes.</td><td>Queue follow-up clarification requests.</td></tr>
+<tr><td>Interrupt</td><td>Stop or pause the active run, then process the new input.</td><td>Manager says “stop allocation; new priority”.</td></tr>
+<tr><td>Rollback</td><td>Resume from an earlier checkpoint and branch with the new input.</td><td>Rework task allocation from a pre-approval snapshot.</td></tr></table>
+<div class="cave-note">Choose and implement the policy deliberately. Protect each thread from concurrent writes, define queue/locking behaviour, and guard external side effects against duplicate execution.</div></section>
+
+<section class="cave-grid"><div class="cave-card"><h2>🧠 Knowledge check</h2><p id="quizQ"></p><div id="quizA"></div><p id="quizResult"></p></div>
+<div class="cave-card"><h2>🏁 Expedition tracker</h2><label><input type="checkbox" class="cave-check" value="checkpoints"> Checkpoints and thread IDs</label><br>
+<label><input type="checkbox" class="cave-check" value="breakpoints"> Static breakpoints</label><br><label><input type="checkbox" class="cave-check" value="interrupts"> Dynamic interrupts and resume</label><br><label><input type="checkbox" class="cave-check" value="state"> Inspect and edit state</label><br><label><input type="checkbox" class="cave-check" value="travel"> Time travel and branching</label><br><label><input type="checkbox" class="cave-check" value="double"> Double-texting policies</label><p class="cave-pill" id="progress">0 / 6 explored</p></div></section>
+<div style="margin:20px 0"><a class="cave-btn alt" href="memory-lake.html">← Memory Lake</a><a class="cave-btn" href="index.html">Adventure Map</a></div>
+</main>
+<script src="app.js"></script><script src="time-travel-cave.js"></script></body></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research Observatory • LangGraph Adventure</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.obs-wrap{max-width:1100px;margin:auto;padding:22px}.obs-hero,.obs-card{background:#fff;border:2px solid #d8e9c9;border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 5px 18px #355b2510}
+.obs-hero{background:linear-gradient(120deg,#e8f6ff,#fff5d9)}.obs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.obs-pill{display:inline-block;background:#e4f2d8;padding:6px 12px;border-radius:20px;font-weight:700;color:#315d2c}
+.obs-choice{display:block;width:100%;text-align:left;background:#fff;border:2px solid #dce8d3;border-radius:14px;padding:13px;margin:8px 0;cursor:pointer;color:#23432a}
+.obs-choice.active{border-color:#60a34e;background:#f1fae9}.obs-choice small{display:block;margin-top:5px;color:#5e715b}
+.obs-code{white-space:pre-wrap;overflow:auto;background:#183b32;color:#f1ffe9;padding:16px;border-radius:14px;font-size:13px}
+.obs-note{background:#fff5d9;border-left:5px solid #e5b94d;padding:12px;border-radius:8px}
+.obs-btn{background:#438c3b;color:white;border:0;border-radius:22px;padding:10px 16px;margin:5px;cursor:pointer;font-weight:700}
+.obs-btn.alt{background:#e8f2df;color:#315d2c}.obs-step{padding:12px;border-radius:12px;background:#f2f8ed;margin:8px 0}
+.obs-wrap table{border-collapse:collapse;width:100%;min-width:540px}.obs-wrap th,.obs-wrap td{padding:10px;border-bottom:1px solid #dce8d3;text-align:left}
+.stream-box{background:#f3f9ee;border:1px solid #cfe3c1;border-radius:14px;padding:14px;min-height:110px;white-space:pre-wrap}
+.source-chip{display:inline-block;background:#e6f1ff;border-radius:15px;padding:5px 9px;margin:3px;font-size:12px}
+</style></head>
+<body>
+<header class="topbar"><a class="brand" href="index.html">🧭 LangGraph Adventure</a><span class="tag">DESTINATION 08 • RESEARCH OBSERVATORY</span></header>
+<main class="obs-wrap">
+<a href="index.html">← Adventure Map</a>
+<section class="obs-hero"><span class="obs-pill">🔭 RESEARCH OBSERVATORY</span><h1>Teach your graph to investigate</h1>
+<p>Research assistants gather evidence, inspect sources, identify uncertainty and produce useful summaries. In TeamPilot, this helps the team understand unfamiliar technologies without pretending to know what it has not verified.</p>
+<div class="obs-note"><b>Byte says:</b> “A good explorer doesn't guess what's behind the mountain. They collect clues, check where each clue came from, and tell the team what is known, uncertain and worth testing!”</div>
+<button class="obs-btn" onclick="sayByte()">🔊 Hear Byte</button><button class="obs-btn alt" onclick="speechSynthesis.cancel()">Stop voice</button></section>
+
+<section class="obs-card"><h2>🧭 Research Assistant journey</h2>
+<div class="obs-grid">
+<div class="obs-step">1️⃣ <b>Understand the question</b><br>Clarify what the team needs to decide.</div>
+<div class="obs-step">2️⃣ <b>Plan the investigation</b><br>Break the question into searchable sub-questions.</div>
+<div class="obs-step">3️⃣ <b>Gather evidence</b><br>Call approved search, docs or internal tools.</div>
+<div class="obs-step">4️⃣ <b>Verify sources</b><br>Check authority, recency, relevance and agreement.</div>
+<div class="obs-step">5️⃣ <b>Synthesise findings</b><br>Separate facts, assumptions and unknowns.</div>
+<div class="obs-step">6️⃣ <b>Recommend next steps</b><br>Propose a learning task, POC or decision.</div>
+</div>
+<div class="obs-note">A research agent should not turn search snippets into unquestioned truth. Preserve source metadata and let the application enforce which domains, tools and actions are permitted.</div></section>
+
+<section class="obs-grid">
+<div class="obs-card"><h2>🧰 Tool calling is a loop</h2>
+<p>The model decides whether a tool is useful and proposes arguments. The application validates permissions and arguments, executes the tool, then returns the result to the model.</p>
+<ol><li>Model requests a search.</li><li>Runtime validates the tool call.</li><li>Tool retrieves evidence.</li><li>Result is added to the conversation.</li><li>Model synthesises or asks for another tool.</li></ol></div>
+<div class="obs-card"><h2>🧪 Research quality checklist</h2>
+<ul><li>Prefer official documentation for API and product behaviour.</li><li>Record URL, title, publisher and retrieval date.</li><li>Check publication/update dates for fast-changing technologies.</li><li>Use more than one independent source for consequential claims.</li><li>Label assumptions and confidence; don't fabricate citations.</li><li>Escalate when evidence is insufficient or contradictory.</li></ul></div>
+</section>
+
+<section class="obs-card"><h2>🛰️ TeamPilot technology discovery challenge</h2>
+<p>Imagine the project brief mentions a technology nobody on the team has used. Pick the situation:</p>
+<div id="researchScenarios">
+<button class="obs-choice active" data-s="unknown"><b>Technology unfamiliar to everyone</b><small>TeamPilot needs to assess GraphRAG for a new feature.</small></button>
+<button class="obs-choice" data-s="conflict"><b>Sources disagree</b><small>Two sources describe different compatibility requirements.</small></button>
+<button class="obs-choice" data-s="stale"><b>Possibly outdated guidance</b><small>A tutorial is old and may use deprecated APIs.</small></button>
+</div><div id="scenarioAdvice" class="obs-note"></div></section>
+
+<section class="obs-card"><h2>🌊 Streaming: show progress as it happens</h2>
+<p>Streaming lets the UI receive updates before the entire graph finishes. Depending on the stream mode and framework version, the app can surface state updates, model messages, custom progress events or debug information.</p>
+<div class="obs-grid"><div><b>Without streaming</b><div class="stream-box">⏳ User waits…<br>Final report appears after completion.</div></div>
+<div><b>With progress events</b><div class="stream-box" id="streamDemo">Ready to simulate a research run.</div><button class="obs-btn" onclick="runStream()">▶ Simulate stream</button><button class="obs-btn alt" onclick="resetStream()">Reset</button></div></div>
+<div class="obs-note">This is a front-end simulation for learning. It does not call a live LLM or web-search provider. In a real app, stream events from your FastAPI endpoint and handle disconnects, cancellation and errors.</div></section>
+
+<section class="obs-card"><h2>💻 Select a research code recipe</h2>
+<div id="recipes">
+<button class="obs-choice active" data-r="research">Research assistant graph</button>
+<button class="obs-choice" data-r="tools">Tool calling with search</button>
+<button class="obs-choice" data-r="stream">Stream graph updates</button>
+<button class="obs-choice" data-r="evidence">Evidence-aware output schema</button>
+</div>
+<h3 id="codeTitle">research_assistant.py</h3><pre class="obs-code" id="codeBlock"></pre>
+<button class="obs-btn" onclick="copyCode()">Copy code</button><button class="obs-btn alt" onclick="downloadCode()">Download Python file</button>
+<div id="codeNote" class="obs-note"></div></section>
+
+<section class="obs-card"><h2>🧱 Build a research report that decision-makers can trust</h2>
+<div class="obs-grid">
+<div class="obs-step"><b>Finding</b><p>What the source explicitly supports.</p></div>
+<div class="obs-step"><b>Source</b><p>Where the claim came from and when it was checked.</p></div>
+<div class="obs-step"><b>Confidence</b><p>High, medium or low, with a reason.</p></div>
+<div class="obs-step"><b>Assumption</b><p>What the team is inferring rather than observing.</p></div>
+<div class="obs-step"><b>Open question</b><p>What remains unresolved.</p></div>
+<div class="obs-step"><b>Recommendation</b><p>Research more, run a POC, learn, collaborate or defer.</p></div>
+</div>
+<p class="obs-note">For TeamPilot, research should inform a human decision. It should not silently assign a technology owner, approve spend or modify production infrastructure.</p></section>
+
+<section class="obs-grid"><div class="obs-card"><h2>🧠 Knowledge check</h2><p id="quizQ"></p><div id="quizA"></div><p id="quizResult"></p></div>
+<div class="obs-card"><h2>🏁 Expedition tracker</h2>
+<label><input type="checkbox" class="obs-check" value="research"> Research Assistant flow</label><br>
+<label><input type="checkbox" class="obs-check" value="tools"> Tool calling and runtime permissions</label><br>
+<label><input type="checkbox" class="obs-check" value="evidence"> Source verification and evidence</label><br>
+<label><input type="checkbox" class="obs-check" value="stream"> Streaming updates</label><br>
+<label><input type="checkbox" class="obs-check" value="uncertainty"> Facts vs assumptions vs unknowns</label><br>
+<label><input type="checkbox" class="obs-check" value="recommend"> Human-reviewed recommendations</label>
+<p class="obs-pill" id="progress">0 / 6 explored</p></div></section>
+<div style="margin:20px 0"><a class="obs-btn alt" href="time-travel-cave.html">← Time Travel Cave</a><a class="obs-btn" href="index.html">Adventure Map</a></div>
+</main><script src="app.js"></script><script src="research-observatory.js"></script></body></html>

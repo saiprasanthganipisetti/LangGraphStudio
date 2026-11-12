@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Academy</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="index.html">🧭 LangGraph Adventure</a><span class="tag">DESTINATION 05 • AGENT ACADEMY</span></header>
+<main class="page">
+<a class="crumb" href="index.html">← Adventure Map</a>
+<section class="page-head"><span class="pill">🏰 AGENT ACADEMY</span><h1>Teach your graph to make decisions</h1>
+<p>Explore the difference between fixed workflows and agents that choose tools, observe results and decide what to do next.</p></section>
+<div class="mentor"><div class="avatar">🧑🏻‍🚀</div><div><b>Byte says:</b><p>An ordinary workflow follows a route we design. An agent can choose its next action based on what it learns. But remember: give agents clear tools, boundaries and a way to stop!</p>
+<div class="actions"><button onclick="speak('An ordinary workflow follows a route we design. An agent can choose its next action based on what it learns. Give agents clear tools, boundaries and a way to stop!')">🔊 Hear Byte</button><button class="alt" onclick="speechSynthesis.cancel()">⏹ Stop</button></div></div></div>
+
+<section class="panel"><h2>🧭 First decision: workflow, chain or agent?</h2>
+<p class="muted">Choose the approach that best fits each job. More autonomy is not automatically better.</p>
+<div class="cards" id="decisionChoices">
+<button class="choice active" data-id="workflow"><strong>🛤️ Fixed workflow</strong><small>Known steps, predictable route, clear approval gates.</small></button>
+<button class="choice" data-id="chain"><strong>🔗 Chain</strong><small>A sequence of model or processing steps.</small></button>
+<button class="choice" data-id="agent"><strong>🤖 Agent</strong><small>Model decides whether and which tool to use next.</small></button>
+</div>
+<div class="grid2" style="margin-top:14px"><div class="notice" id="decisionExplanation"></div><div><b>TeamPilot example</b><p id="decisionExample"></p><span class="pill" id="decisionVerdict"></span></div></div>
+</section>
+
+<section class="grid2" style="margin-top:18px">
+<div class="panel"><h2>🔧 What is tool calling?</h2>
+<p>A model can request a named tool with structured arguments. Your application executes the tool, returns its result to the model, and the model continues. The model proposes a call; your runtime enforces permissions and actually executes it.</p>
+<div class="flow"><span class="node">User asks</span><span class="arrow">→</span><span class="node">LLM selects tool</span><span class="arrow">→</span><span class="node">Tool runs</span><span class="arrow">→</span><span class="node">Result to LLM</span><span class="arrow">→</span><span class="node">Answer</span></div>
+<div class="notice">Safety rule: tools should have narrow permissions. A research tool may read approved sources; an email tool should not send messages until the human approval gate is passed.</div>
+</div>
+<div class="panel"><h2>🔁 ReAct loop</h2>
+<p>ReAct means reasoning and acting in a loop: the agent decides on an action, observes the result, then decides whether to act again or finish.</p>
+<div class="flow"><span class="node">Think / decide</span><span class="arrow">→</span><span class="node">Act</span><span class="arrow">→</span><span class="node">Observe</span><span class="arrow">↺</span><span class="node">Decide again</span></div>
+<p class="muted">The loop must have stop conditions, iteration limits and tool error handling. Do not expose hidden reasoning; log concise actions and outcomes instead.</p>
+</div></section>
+
+<section class="panel" style="margin-top:18px"><h2>🎮 Try an agent decision simulator</h2>
+<p>Choose a TeamPilot situation and see a safe example of an agent's tool-selection loop.</p>
+<div class="cards" id="scenarioChoices">
+<button class="choice active" data-id="unknown"><strong>Unknown technology</strong><small>The project requires GraphRAG, but the team profile has no matching expertise.</small></button>
+<button class="choice" data-id="docs"><strong>Clarify requirements</strong><small>The uploaded brief contains an ambiguous requirement.</small></button>
+<button class="choice" data-id="email"><strong>Send assignment emails</strong><small>Tasks are allocated and emails are ready.</small></button>
+</div>
+<div class="actions"><button onclick="runSimulation()">▶ Run agent simulation</button><button class="alt" onclick="resetSimulation()">Reset</button></div>
+<div id="simulation" class="notice" style="margin-top:14px" aria-live="polite">Choose a situation and run the simulation.</div>
+</section>
+
+<section class="panel" style="margin-top:18px"><h2>🧑‍🤝‍🧑 Multi-agent collaboration</h2>
+<p>Multiple specialist agents can contribute to a larger workflow. A supervisor or explicit graph routes work between them. For TeamPilot, use specialists only where separate expertise or tool access adds value.</p>
+<div class="flow"><span class="node">Supervisor</span><span class="arrow">↙</span><span class="node">Project analyst</span><span class="arrow">↘</span><span class="node">Technology analyst</span><span class="arrow">↓</span><span class="node">Task planner</span><span class="arrow">→</span><span class="node">Validator</span></div>
+<p class="muted">A set of named nodes is not automatically a set of autonomous agents. A specialist becomes agentic when it uses an LLM to make decisions or select tools. Keep deterministic validation and approval logic as ordinary graph nodes.</p>
+</section>
+
+<section class="panel" style="margin-top:18px"><h2>💻 Choose a code recipe</h2>
+<p class="muted">These are teaching templates. Pin package versions and test the selected recipe before the workshop.</p>
+<div class="cards" id="recipeChoices">
+<button class="choice active" data-id="tool"><strong>Tool-calling loop</strong><small>LLM tool call → ToolNode → back to LLM.</small></button>
+<button class="choice" data-id="react"><strong>ReAct-style agent</strong><small>Model chooses tools until it returns a final response.</small></button>
+<button class="choice" data-id="multi"><strong>Specialist workflow</strong><small>Explicit supervisor routing between specialists.</small></button>
+</div>
+<h3 id="recipeTitle" style="margin-top:18px">tool_calling.py</h3><pre class="code" id="recipeCode"></pre>
+<div class="actions"><button onclick="copyRecipe()">Copy code</button><button class="alt" onclick="downloadRecipe()">Download Python file</button></div>
+<p class="notice" id="recipeNote"></p>
+</section>
+
+<section class="grid2" style="margin-top:18px">
+<div class="panel"><h2>🧠 Knowledge check</h2><p id="quizQuestion"></p><div id="quizOptions"></div><p id="quizFeedback" aria-live="polite"></p></div>
+<div class="panel"><h2>🏁 Academy checklist</h2><p>Mark a topic when the team can explain it and identify where it belongs in TeamPilot.</p>
+<label><input type="checkbox" class="academy-check" value="workflow"> Workflow vs chain vs agent</label><br>
+<label><input type="checkbox" class="academy-check" value="tools"> Tool calling and permissions</label><br>
+<label><input type="checkbox" class="academy-check" value="react"> ReAct decision loop</label><br>
+<label><input type="checkbox" class="academy-check" value="multi"> Multi-agent collaboration</label><br>
+<label><input type="checkbox" class="academy-check" value="safety"> Stop conditions and human gates</label>
+<p class="pill" id="academyProgress">0 / 5 explored</p></div>
+</section>
+<div class="actions" style="margin-top:20px"><a class="button secondary" href="puzzle-mountain.html">← Puzzle Mountain</a><a class="button" href="index.html">Adventure Map</a></div>
+</main>
+<script src="app.js"></script><script src="agent-academy.js"></script>
+</body></html>

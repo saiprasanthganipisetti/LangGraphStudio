@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TeamPilot HQ • LangGraph Adventure</title><link rel="stylesheet" href="styles.css">
+<style>
+.hq-wrap{max-width:1150px;margin:auto;padding:22px}.hq-hero,.hq-card{background:#fff;border:2px solid #d8e9c9;border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 5px 18px #355b2510}
+.hq-hero{background:linear-gradient(120deg,#e6f7d9,#fff2d5)}.hq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.hq-pill{display:inline-block;background:#e4f2d8;padding:6px 12px;border-radius:20px;font-weight:700;color:#315d2c}
+.hq-btn{background:#438c3b;color:#fff;border:0;border-radius:22px;padding:10px 16px;margin:5px;cursor:pointer;font-weight:700}.hq-btn.alt{background:#e8f2df;color:#315d2c}
+.hq-input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #b9d0ad;border-radius:10px;margin:5px 0 12px;font:inherit}.hq-label{font-weight:700;display:block}
+.hq-member{background:#f7fbf3;border:1px solid #dce9d5;border-radius:14px;padding:12px}.hq-member h3{margin:4px 0}
+.hq-stage{padding:12px;border-radius:12px;background:#f1f8eb;border:1px solid #d9e9cf;margin:8px 0}.hq-stage.done{background:#e2f6df;border-color:#78bd69}
+.hq-result{background:#f5f9f1;border:1px solid #d6e7cb;border-radius:12px;padding:12px;margin:8px 0}
+.hq-table-wrap{overflow-x:auto}.hq-table{border-collapse:collapse;width:100%;min-width:650px}.hq-table th,.hq-table td{padding:10px;border-bottom:1px solid #dce8d3;text-align:left;vertical-align:top}
+.hq-code{white-space:pre-wrap;overflow:auto;background:#183b32;color:#f1ffe9;padding:16px;border-radius:14px;font-size:12px}
+.hq-muted{color:#61755d;font-size:.93rem}.hq-warning{background:#fff4d8;border-left:5px solid #e4b64a;padding:12px;border-radius:8px}
+</style></head><body>
+<header class="topbar"><a class="brand" href="index.html">🧭 LangGraph Adventure</a><span class="tag">DESTINATION 09 • TEAMPILOT HQ</span></header>
+<main class="hq-wrap">
+<a href="index.html">← Adventure Map</a>
+<section class="hq-hero"><span class="hq-pill">🚀 FINAL DESTINATION</span><h1>From requirements to responsibilities</h1>
+<p>Bring the workshop concepts together in a collaborative AI project-management assistant. Your team can explore the workflow, enter a project brief, define six team profiles, review a sample allocation and prepare assignment emails.</p>
+<div class="hq-warning"><b>Byte says:</b> “This is our MVP command centre! The sample run is a local interactive simulation. It helps your team make architecture and product decisions; it does not call an LLM, send email or upload files to a server.”</div>
+<button class="hq-btn" onclick="sayByte()">🔊 Hear Byte</button><button class="hq-btn alt" onclick="speechSynthesis.cancel()">Stop voice</button></section>
+
+<section class="hq-card"><h2>🗺️ TeamPilot workflow</h2><div class="hq-grid" id="workflowMap">
+<div class="hq-stage">📄 <b>1. Requirements intake</b><br><small>Upload and parse project documents</small></div>
+<div class="hq-stage">🧭 <b>2. Project analysis</b><br><small>Goals, scope, constraints, ambiguities</small></div>
+<div class="hq-stage">🔭 <b>3. Technology research</b><br><small>Evidence, unknowns, recommendations</small></div>
+<div class="hq-stage">🧩 <b>4. Component design</b><br><small>Components, dependencies and risks</small></div>
+<div class="hq-stage">📝 <b>5. Story generation</b><br><small>Tasks, acceptance criteria and estimates</small></div>
+<div class="hq-stage">👥 <b>6. Team intelligence</b><br><small>Skills, interests, capacity and workload</small></div>
+<div class="hq-stage">⚖️ <b>7. Task allocation</b><br><small>Explainable candidate matching</small></div>
+<div class="hq-stage">🛡️ <b>8. Validation</b><br><small>Dependencies, suitability, workload</small></div>
+<div class="hq-stage">🙋 <b>9. Human approval</b><br><small>Approve, reject or request rework</small></div>
+<div class="hq-stage">✉️ <b>10. Communications</b><br><small>Preview six personalised emails</small></div></div>
+<p class="hq-muted">Use deterministic Python functions for parsing, validation and policy checks; use LLM-backed nodes for reasoning where it adds value. Don't force every stage to be an autonomous agent.</p></section>
+
+<section class="hq-card"><h2>📄 Step 1 — Project intake</h2>
+<label class="hq-label" for="projectName">Project name</label><input class="hq-input" id="projectName" value="TeamPilot AI">
+<label class="hq-label" for="projectBrief">Project requirements / brief</label><textarea class="hq-input" id="projectBrief" rows="5">Build an AI project management assistant. It should analyse requirements, research unfamiliar technologies, create components and user stories, allocate work across six team members using skills and capacity, validate the plan, request manager approval, and prepare assignment emails.</textarea>
+<label class="hq-label" for="techStack">Known or proposed technologies</label><input class="hq-input" id="techStack" value="Python, FastAPI, LangGraph, HTML, CSS, JavaScript">
+<label class="hq-label" for="unknownTech">Technologies needing investigation</label><input class="hq-input" id="unknownTech" value="GraphRAG, MCP">
+<label class="hq-label" for="projectFiles">Attach requirement files (prototype selection only)</label><input class="hq-input" id="projectFiles" type="file" multiple accept=".pdf,.docx,.txt,.md">
+<p id="fileList" class="hq-muted">No files selected.</p>
+<div class="hq-warning">File selection is currently local UI only. Real PDF/DOCX parsing, malware scanning, size limits and secure storage must be implemented in the FastAPI backend.</div></section>
+
+<section class="hq-card"><h2>👥 Step 2 — Team intelligence: six profiles</h2>
+<p>Replace these sample profiles with your actual team details during the workshop. Availability is expressed as estimated hours per week available for this project.</p>
+<div class="hq-grid" id="members"></div>
+<div class="hq-warning">For this prototype, profile data stays in this browser's local storage. Avoid entering sensitive personal information. In a deployed app, restrict profile visibility and let members verify their own skills and capacity.</div>
+<button class="hq-btn alt" onclick="resetMembers()">Restore sample profiles</button></section>
+
+<section class="hq-card"><h2>⚙️ Step 3 — Run the MVP planning simulation</h2>
+<p>Generate example work packages from the brief and propose owners based on profile skill matches and available capacity. This demo uses transparent keyword scoring, not an LLM or an optimisation solver.</p>
+<label class="hq-label"><input type="checkbox" id="includeUnknown" checked> Include a research / learning task for unfamiliar technologies</label>
+<button class="hq-btn" onclick="runPlanning()">▶ Generate sample project plan</button>
+<div id="planOutput" aria-live="polite"></div></section>
+
+<section class="hq-card"><h2>🛡️ Step 4 — Validation and manager approval</h2>
+<div id="validationOutput" class="hq-result">Run the planning simulation to generate a proposal for review.</div>
+<div class="hq-grid"><button class="hq-btn" onclick="approvePlan()">✅ Approve proposal</button><button class="hq-btn alt" onclick="rejectPlan()">↩ Request rework</button></div>
+<p id="approvalStatus" class="hq-muted">No decision has been recorded.</p>
+<div class="hq-warning">Approval is a real workflow gate in the intended backend. Email delivery must remain impossible until an authorised manager approves the exact reviewed allocation and message previews.</div></section>
+
+<section class="hq-card"><h2>✉️ Step 5 — Personalised assignment email previews</h2>
+<p>Generate editable drafts for each team member. No email is sent from this page.</p>
+<button class="hq-btn" onclick="generateEmails()">Generate email previews</button>
+<div id="emailPreviews"></div>
+<button class="hq-btn alt" onclick="downloadEmailPayload()">Download email payload JSON</button>
+<div class="hq-warning">Existing SMTP integration should sit behind a backend email service abstraction. Local mode saves/returns previews only; AWS mode may call the deployed SMTP service. Require manager approval, recipient validation, audit logging and idempotency before sending.</div></section>
+
+<section class="hq-card"><h2>🏗️ Architecture decisions for the real MVP</h2>
+<div class="hq-grid">
+<div class="hq-result"><b>Frontend</b><p>Plain HTML, CSS and JavaScript. Upload UI, profile editor, progress stream, allocation review and email preview.</p></div>
+<div class="hq-result"><b>API</b><p>FastAPI. Authenticated endpoints for project intake, graph runs, approval/resume, profiles and email previews.</p></div>
+<div class="hq-result"><b>Orchestration</b><p>LangGraph StateGraph with checkpointer, conditional routing, subgraphs and human interrupts.</p></div>
+<div class="hq-result"><b>Persistence</b><p>Durable checkpoint backend plus application database / Store for project and team records.</p></div>
+<div class="hq-result"><b>Research tools</b><p>Approved web/docs search and internal knowledge retrieval, with source provenance and access controls.</p></div>
+<div class="hq-result"><b>Deployment</b><p>AWS deployment target, secrets manager, logging, metrics, secure document storage and SMTP service integration.</p></div>
+</div></section>
+
+<section class="hq-card"><h2>💻 Backend starter kit</h2>
+<p>The V9 ZIP includes a separate <code>teampilot-backend-starter/</code> folder with starter state, graph, FastAPI routes, email-service abstraction and requirements. It is a scaffold—not a production-ready service. Review the README before running it.</p>
+<div class="hq-warning">The backend deliberately does not implement real document parsing, authentication, database persistence, LLM provider credentials or SMTP sending. Those require environment-specific decisions and security review.</div>
+</section>
+
+<section class="hq-grid"><div class="hq-card"><h2>🧠 Knowledge check</h2><p id="quizQ"></p><div id="quizA"></div><p id="quizResult"></p></div>
+<div class="hq-card"><h2>🏁 TeamPilot launch checklist</h2>
+<label><input type="checkbox" class="hq-check" value="scope"> Agree on MVP scope and success criteria</label><br>
+<label><input type="checkbox" class="hq-check" value="profiles"> Confirm all six team profiles</label><br>
+<label><input type="checkbox" class="hq-check" value="architecture"> Agree on graph architecture and state</label><br>
+<label><input type="checkbox" class="hq-check" value="research"> Approve research sources and tools</label><br>
+<label><input type="checkbox" class="hq-check" value="approval"> Define manager approval policy</label><br>
+<label><input type="checkbox" class="hq-check" value="email"> Validate email preview and send controls</label><br>
+<label><input type="checkbox" class="hq-check" value="deploy"> Agree deployment, secrets and persistence plan</label>
+<p class="hq-pill" id="launchProgress">0 / 7 complete</p></div></section>
+<div style="margin:20px 0"><a class="hq-btn alt" href="research-observatory.html">← Research Observatory</a><a class="hq-btn" href="index.html">Adventure Map</a></div>
+</main><script src="app.js"></script><script src="team-pilot-hq.js"></script></body></html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memory Lake</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="index.html">🧭 LangGraph Adventure</a><span class="tag">DESTINATION 06 • MEMORY LAKE</span></header>
+<main class="page">
+<a class="crumb" href="index.html">← Adventure Map</a>
+<section class="page-head"><span class="pill">🏞️ MEMORY LAKE</span><h1>Give your graph a useful memory</h1>
+<p>Explore what a graph remembers during one conversation, what it can retain across conversations, and how to store that information responsibly.</p></section>
+<div class="mentor"><div class="avatar">🧑🏻‍🚀</div><div><b>Byte says:</b><p>Think of short-term memory as the notebook for one ongoing conversation. Long-term memory is a carefully organised library that can be used again in future conversations. Let's decide what belongs where!</p>
+<div class="actions"><button onclick="speak('Short-term memory is the notebook for one ongoing conversation. Long-term memory is a carefully organised library that can be used again in future conversations.')">🔊 Hear Byte</button><button class="alt" onclick="speechSynthesis.cancel()">⏹ Stop</button></div></div></div>
+
+<section class="grid2">
+<div class="panel"><h2>📝 Short-term memory</h2><span class="pill">Thread-scoped</span>
+<p>Stores conversation or workflow state for a particular thread. A checkpointer saves graph state at execution checkpoints so a conversation can resume with its earlier context.</p>
+<ul><li>Conversation messages</li><li>Current project request</li><li>Pending clarification</li><li>Current workflow step</li></ul>
+<div class="notice">In TeamPilot: remember the uploaded project brief and unresolved questions while the manager is working in the same project conversation.</div></div>
+<div class="panel"><h2>📚 Long-term memory</h2><span class="pill">Cross-thread</span>
+<p>Stores selected information that should be available across separate threads or sessions. LangGraph Store organises memories by namespace and key.</p>
+<ul><li>Reusable team preferences</li><li>Approved project conventions</li><li>Technology decisions</li><li>Stable profile information</li></ul>
+<div class="notice">In TeamPilot: retain an approved team capability profile or a confirmed technology decision for later project conversations, subject to access controls.</div></div>
+</section>
+
+<section class="panel" style="margin-top:18px"><h2>🔍 Compare the two kinds of memory</h2>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:520px"><thead><tr><th style="text-align:left;padding:10px">Question</th><th style="text-align:left;padding:10px">Short-term</th><th style="text-align:left;padding:10px">Long-term</th></tr></thead><tbody>
+<tr><td style="padding:10px;border-top:1px solid #dce9d5">Scope</td><td style="padding:10px;border-top:1px solid #dce9d5">One thread</td><td style="padding:10px;border-top:1px solid #dce9d5">Across threads</td></tr>
+<tr><td style="padding:10px;border-top:1px solid #dce9d5">Typical mechanism</td><td style="padding:10px;border-top:1px solid #dce9d5">Checkpointer</td><td style="padding:10px;border-top:1px solid #dce9d5">Store</td></tr>
+<tr><td style="padding:10px;border-top:1px solid #dce9d5">Example</td><td style="padding:10px;border-top:1px solid #dce9d5">Current conversation context</td><td style="padding:10px;border-top:1px solid #dce9d5">Approved reusable team profile</td></tr>
+<tr><td style="padding:10px;border-top:1px solid #dce9d5">Lifecycle</td><td style="padding:10px;border-top:1px solid #dce9d5">Tied to thread/checkpoint lifecycle</td><td style="padding:10px;border-top:1px solid #dce9d5">Managed independently by application policy</td></tr>
+</tbody></table></div>
+<p class="notice">A checkpointer and a Store solve different problems. A checkpointer persists graph state; a Store persists application memories you choose to retrieve and update.</p></section>
+
+<section class="grid2" style="margin-top:18px">
+<div class="panel"><h2>👤 Memory schema: Profile</h2>
+<p>A profile is a structured representation of relatively stable facts about one person or entity.</p>
+<div class="code">{\n  "member_id": "member-01",\n  "role": "Backend Engineer",\n  "skills": ["Python", "FastAPI"],\n  "interests": ["AI agents"],\n  "learning_goals": ["LangGraph"]\n}</div>
+<p class="muted">Useful when the application needs one coherent record that can be updated as facts change.</p></div>
+<div class="panel"><h2>🗃️ Memory schema: Collection</h2>
+<p>A collection stores multiple independent memories or observations, each with its own identity and metadata.</p>
+<div class="code">[\n  {"type": "decision", "text": "Use FastAPI"},\n  {"type": "preference", "text": "Prefer small PRs"},\n  {"type": "learning", "text": "Explore GraphRAG"}\n]</div>
+<p class="muted">Useful when facts accumulate over time and should be searched, filtered, added or removed independently.</p></div>
+</section>
+
+<section class="panel" style="margin-top:18px"><h2>🧪 Choose a memory design for TeamPilot</h2>
+<div class="cards" id="memoryChoices">
+<button class="choice active" data-id="thread"><strong>💬 Current project conversation</strong><small>Keep current requirements, questions and draft task state available as the thread continues.</small></button>
+<button class="choice" data-id="profile"><strong>👥 Team member profile</strong><small>Reuse approved skills, experience, interests and capacity information across projects.</small></button>
+<button class="choice" data-id="decisions"><strong>📌 Project decision collection</strong><small>Find individual decisions and their source, date and approval status.</small></button>
+</div>
+<div class="grid2" style="margin-top:14px"><div class="notice" id="memoryAdvice"></div><div><b>Likely storage choice</b><p id="memoryStorage"></p><b>Why?</b><p id="memoryReason"></p></div></div>
+</section>
+
+<section class="panel" style="margin-top:18px"><h2>💻 Code recipes: Checkpointer and Store</h2>
+<p class="muted">Choose a starter pattern. Persistence backends, imports and setup depend on the pinned LangGraph release and deployment environment.</p>
+<div class="cards" id="recipeChoices">
+<button class="choice active" data-id="checkpointer"><strong>Thread checkpointing</strong><small>Resume a conversation using a thread ID.</small></button>
+<button class="choice" data-id="store"><strong>Long-term Store</strong><small>Save and retrieve a memory by namespace and key.</small></button>
+<button class="choice" data-id="agent"><strong>Memory management node</strong><small>Extract a candidate memory and ask for approval before saving.</small></button>
+</div>
+<h3 id="recipeTitle" style="margin-top:18px">short_term_memory.py</h3><pre class="code" id="recipeCode"></pre>
+<div class="actions"><button onclick="copyMemoryCode()">Copy code</button><button class="alt" onclick="downloadMemoryCode()">Download Python file</button></div>
+<p class="notice" id="recipeNote"></p></section>
+
+<section class="panel" style="margin-top:18px"><h2>🛡️ Memory safety rules</h2>
+<ul><li>Store only information the application genuinely needs.</li><li>Keep personal data scoped to authorised users and projects.</li><li>Record provenance, timestamps and confidence for extracted facts.</li><li>Ask for confirmation before saving uncertain or consequential profile changes.</li><li>Provide correction, retention and deletion workflows.</li><li>Do not treat model-generated guesses as verified team skills or availability.</li></ul>
+</section>
+
+<section class="grid2" style="margin-top:18px">
+<div class="panel"><h2>🧠 Knowledge check</h2><p id="quizQuestion"></p><div id="quizOptions"></div><p id="quizFeedback" aria-live="polite"></p></div>
+<div class="panel"><h2>🏁 Lake expedition log</h2><p>Mark each concept once your team can explain it.</p>
+<label><input type="checkbox" class="memory-check" value="short"> Short-term memory and checkpointers</label><br>
+<label><input type="checkbox" class="memory-check" value="long"> Long-term memory and Store</label><br>
+<label><input type="checkbox" class="memory-check" value="profile"> Profile schema</label><br>
+<label><input type="checkbox" class="memory-check" value="collection"> Collection schema</label><br>
+<label><input type="checkbox" class="memory-check" value="agent"> Memory management agent</label>
+<p class="pill" id="memoryProgress">0 / 5 explored</p></div></section>
+<div class="actions" style="margin-top:20px"><a class="button secondary" href="agent-academy.html">← Agent Academy</a><a class="button" href="index.html">Adventure Map</a></div>
+</main><script src="app.js"></script><script src="memory-lake.js"></script></body></html>

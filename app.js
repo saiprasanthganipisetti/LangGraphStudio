@@ -1,0 +1,1 @@
+function speak(text){if(!("speechSynthesis" in window)){alert("Speech synthesis is not available in this browser.");return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-IN";u.rate=.94;speechSynthesis.speak(u);}
