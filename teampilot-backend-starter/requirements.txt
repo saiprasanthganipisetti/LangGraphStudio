@@ -1,0 +1,5 @@
+# Reproducible workshop baseline checked against PyPI on 2026-11-12.
+langgraph==1.2.20
+fastapi==0.162.4
+pydantic[email]==2.14.3
+uvicorn[standard]>=0.30,<1
